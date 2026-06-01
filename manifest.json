@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "fizy Yardımcı",
+  "description": "listen.fizy.com için akıllı duraklat ve müzik içerik köprüsü.",
+  "version": "3.0.0",
+  "permissions": ["tabs", "storage", "alarms"],
+  "host_permissions": [
+    "https://listen.fizy.com/*",
+    "https://integrate.api.nvidia.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://listen.fizy.com/*"],
+      "js": ["data/artists.js", "content.js"],
+      "css": ["sidebar.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "fizy Yardımcı"
+  }
+}

@@ -1,0 +1,622 @@
+/* sidebar.css — fizy Yardımcı yan paneli (v3 · "Obsidian & Glass").
+ *
+ * Konsept: premium, monokrom, derin.
+ *   • Obsidyen siyahı zemin (#09090B) + frosted-glass panel
+ *   • Yüzeyler çizgiyle değil incecik ışık kenarlarıyla belirlenir
+ *     (1px rgba(255,255,255,0.08))
+ *   • Tek modern sans-serif tipografi; kalın/sıkı başlık, ince/gri gövde
+ *   • Tek renk kaynağı: çalan albümün kapağı — arkasından sızan dinamik glow
+ *   • İMZA: kapak altında incecik, zarif ses dalgası (kalın bar yok)
+ *   • Bölümler çizgiyle değil boşlukla ayrılır; emoji/numara/şerit yok
+ */
+
+#fizy-yardimci-sidebar.fy-sidebar {
+  /* ===== Renk ===== */
+  --fy-bg: #09090b;
+  --fy-glass: rgba(12, 12, 15, 0.72);
+  --fy-surface: rgba(255, 255, 255, 0.03);
+  --fy-surface-2: rgba(255, 255, 255, 0.06);
+  --fy-border: rgba(255, 255, 255, 0.08);
+  --fy-border-strong: rgba(255, 255, 255, 0.14);
+
+  --fy-text: #fafafa;
+  --fy-text-dim: #a1a1aa;
+  --fy-text-mute: #71717a;
+
+  --fy-accent: #fafafa; /* monokrom: vurgu beyazdır */
+
+  /* ===== Tipografi (tek font) ===== */
+  --fy-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter",
+    system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* ===== Spacing ===== */
+  --fy-space-2xs: 4px;
+  --fy-space-xs: 8px;
+  --fy-space-sm: 12px;
+  --fy-space-md: 16px;
+  --fy-space-lg: 24px;
+  --fy-space-xl: 36px;
+
+  /* ===== Radius ===== */
+  --fy-radius-sm: 8px;
+  --fy-radius-md: 12px;
+  --fy-radius-lg: 16px;
+  --fy-radius-pill: 999px;
+
+  /* ===== Motion ===== */
+  --fy-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fy-motion-fast: 160ms var(--fy-ease);
+  --fy-motion-base: 320ms var(--fy-ease);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: stretch;
+  font-family: var(--fy-font);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fy-text);
+  pointer-events: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#fizy-yardimci-sidebar * {
+  box-sizing: border-box;
+}
+
+#fizy-yardimci-sidebar .fy-toggle,
+#fizy-yardimci-sidebar .fy-panel {
+  pointer-events: auto;
+}
+
+/* =====================================================================
+   Aç/Kapa düğmesi — minimal cam tab
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-toggle {
+  align-self: center;
+  width: 28px;
+  height: 56px;
+  margin-right: -1px;
+  background: var(--fy-glass);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--fy-border);
+  border-right: none;
+  border-radius: var(--fy-radius-md) 0 0 var(--fy-radius-md);
+  color: var(--fy-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color var(--fy-motion-fast), background var(--fy-motion-fast);
+}
+
+#fizy-yardimci-sidebar .fy-toggle:hover {
+  background: rgba(20, 20, 24, 0.8);
+  color: var(--fy-text);
+}
+
+#fizy-yardimci-sidebar .fy-toggle:focus-visible {
+  outline: 2px solid var(--fy-border-strong);
+  outline-offset: 2px;
+}
+
+#fizy-yardimci-sidebar .fy-toggle .fy-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--fy-motion-base);
+}
+
+#fizy-yardimci-sidebar.fy-collapsed .fy-toggle .fy-icon {
+  transform: rotate(180deg);
+}
+
+/* =====================================================================
+   Panel — frosted glass
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-panel {
+  width: 380px;
+  height: 100%;
+  background: var(--fy-glass);
+  -webkit-backdrop-filter: blur(28px) saturate(1.3);
+  backdrop-filter: blur(28px) saturate(1.3);
+  border-left: 1px solid var(--fy-border);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -32px 0 64px -24px rgba(0, 0, 0, 0.8);
+  transition: transform var(--fy-motion-base);
+  overflow: hidden;
+}
+
+#fizy-yardimci-sidebar.fy-collapsed .fy-panel {
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+#fizy-yardimci-sidebar .fy-panel:focus {
+  outline: none;
+}
+
+/* =====================================================================
+   Header
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-header {
+  display: flex;
+  align-items: center;
+  padding: var(--fy-space-md) var(--fy-space-lg);
+}
+
+#fizy-yardimci-sidebar .fy-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--fy-space-xs);
+}
+
+#fizy-yardimci-sidebar .fy-logo {
+  width: 18px;
+  height: 18px;
+  color: var(--fy-text);
+  flex-shrink: 0;
+}
+
+#fizy-yardimci-sidebar .fy-brand-text {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fy-space-xs);
+  min-width: 0;
+}
+
+#fizy-yardimci-sidebar .fy-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fy-text);
+  letter-spacing: -0.01em;
+}
+
+#fizy-yardimci-sidebar .fy-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--fy-text-mute);
+  font-weight: 400;
+}
+
+/* =====================================================================
+   İçerik kabı
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-content {
+  padding: var(--fy-space-xs) var(--fy-space-lg) var(--fy-space-lg);
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+#fizy-yardimci-sidebar .fy-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+#fizy-yardimci-sidebar .fy-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--fy-radius-pill);
+}
+
+#fizy-yardimci-sidebar .fy-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* =====================================================================
+   İMZA: Now-playing — büyük kapak + dinamik glow + zarif dalga
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-now {
+  position: relative;
+  margin-bottom: var(--fy-space-xl);
+  animation: fy-fade-up var(--fy-motion-base) both;
+}
+
+/* Albüm kapağından sızan dinamik renk — tek renk kaynağı. */
+#fizy-yardimci-sidebar .fy-now-glow {
+  position: absolute;
+  inset: -10% -10% 30%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#fizy-yardimci-sidebar .fy-now-glow img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.3);
+  filter: blur(56px) saturate(1.6);
+  opacity: 0.45;
+}
+
+#fizy-yardimci-sidebar .fy-art-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--fy-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--fy-border);
+  background: var(--fy-surface);
+  box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+}
+
+#fizy-yardimci-sidebar .fy-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#fizy-yardimci-sidebar .fy-art-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(255, 255, 255, 0.06),
+    transparent 70%
+  );
+}
+
+#fizy-yardimci-sidebar .fy-art-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--fy-text-mute);
+}
+
+/* Zarif ses dalgası — incecik beyaz barlar, kalın değil. */
+#fizy-yardimci-sidebar .fy-visualizer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  height: 24px;
+  margin: var(--fy-space-md) 2px var(--fy-space-md);
+}
+
+#fizy-yardimci-sidebar .fy-vis-bar {
+  flex: 1 1 0;
+  max-width: 2px;
+  height: 100%;
+  background: var(--fy-text);
+  border-radius: var(--fy-radius-pill);
+  opacity: 0.55;
+  transform: scaleY(0.18);
+  transform-origin: center;
+  animation: fy-wave 1.3s ease-in-out infinite;
+}
+
+#fizy-yardimci-sidebar.fy-paused .fy-vis-bar {
+  animation-play-state: paused;
+  transform: scaleY(0.12);
+  opacity: 0.3;
+}
+
+#fizy-yardimci-sidebar .fy-track-name {
+  position: relative;
+  z-index: 1;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fy-text);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#fizy-yardimci-sidebar .fy-track-name.fy-flash {
+  animation: fy-flash 0.4s var(--fy-ease);
+}
+
+#fizy-yardimci-sidebar .fy-artist-name {
+  position: relative;
+  z-index: 1;
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--fy-text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =====================================================================
+   Bölümler — boşlukla ayrılır (çizgi/numara YOK)
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-section {
+  margin-bottom: var(--fy-space-xl);
+  animation: fy-fade-up var(--fy-motion-base) both;
+}
+
+#fizy-yardimci-sidebar .fy-section:nth-child(2) { animation-delay: 0.05s; }
+#fizy-yardimci-sidebar .fy-section:nth-child(3) { animation-delay: 0.1s; }
+#fizy-yardimci-sidebar .fy-section:nth-child(4) { animation-delay: 0.15s; }
+#fizy-yardimci-sidebar .fy-section:nth-child(5) { animation-delay: 0.2s; }
+
+#fizy-yardimci-sidebar .fy-section:last-child {
+  margin-bottom: 0;
+}
+
+#fizy-yardimci-sidebar .fy-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--fy-space-xs);
+  margin: 0 0 var(--fy-space-sm);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fy-text);
+}
+
+#fizy-yardimci-sidebar .fy-section-title .fy-icon {
+  width: 15px;
+  height: 15px;
+  color: var(--fy-text-mute);
+  flex-shrink: 0;
+}
+
+/* Bio */
+#fizy-yardimci-sidebar .fy-bio {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--fy-text-dim);
+}
+
+/* Benzer sanatçılar — minimal hap etiketler */
+#fizy-yardimci-sidebar .fy-pills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fy-space-xs);
+}
+
+#fizy-yardimci-sidebar .fy-pill {
+  padding: 6px 13px;
+  border-radius: var(--fy-radius-pill);
+  background: var(--fy-surface-2);
+  border: 1px solid transparent;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--fy-text-dim);
+  white-space: nowrap;
+  transition: color var(--fy-motion-fast), background var(--fy-motion-fast),
+    border-color var(--fy-motion-fast);
+}
+
+#fizy-yardimci-sidebar .fy-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--fy-border);
+  color: var(--fy-text);
+}
+
+/* Öne çıkan parçalar — monokrom */
+#fizy-yardimci-sidebar .fy-track-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#fizy-yardimci-sidebar .fy-track-item {
+  display: flex;
+  align-items: center;
+  gap: var(--fy-space-sm);
+  padding: 9px 10px;
+  margin: 0 -10px;
+  border-radius: var(--fy-radius-sm);
+  transition: background var(--fy-motion-fast);
+}
+
+#fizy-yardimci-sidebar .fy-track-item:hover {
+  background: var(--fy-surface);
+}
+
+#fizy-yardimci-sidebar .fy-track-index {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fy-text-mute);
+  font-variant-numeric: tabular-nums;
+  min-width: 18px;
+}
+
+#fizy-yardimci-sidebar .fy-track-title {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--fy-text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+#fizy-yardimci-sidebar .fy-track-item:hover .fy-track-title {
+  color: var(--fy-text);
+}
+
+/* Yaklaşan konser — modern etkinlik kartı */
+#fizy-yardimci-sidebar .fy-event {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fy-space-md);
+  padding: var(--fy-space-md);
+  border-radius: var(--fy-radius-md);
+  background: var(--fy-surface);
+  border: 1px solid var(--fy-border);
+  transition: border-color var(--fy-motion-fast), box-shadow var(--fy-motion-fast),
+    background var(--fy-motion-fast);
+}
+
+#fizy-yardimci-sidebar .fy-event:hover {
+  background: var(--fy-surface-2);
+  border-color: var(--fy-border-strong);
+  box-shadow: 0 0 0 1px var(--fy-border), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
+}
+
+#fizy-yardimci-sidebar .fy-event-date {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--fy-text);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#fizy-yardimci-sidebar .fy-event-info {
+  min-width: 0;
+}
+
+#fizy-yardimci-sidebar .fy-event-city {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fy-text);
+}
+
+#fizy-yardimci-sidebar .fy-event-venue {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--fy-text-mute);
+  margin-top: 1px;
+}
+
+/* =====================================================================
+   İskelet (shimmer)
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-skel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fy-space-sm);
+}
+
+#fizy-yardimci-sidebar .fy-skel-line,
+#fizy-yardimci-sidebar .fy-skel-pill {
+  position: relative;
+  overflow: hidden;
+  background: var(--fy-surface-2);
+  border-radius: var(--fy-radius-sm);
+}
+
+#fizy-yardimci-sidebar .fy-skel-line {
+  height: 13px;
+}
+
+#fizy-yardimci-sidebar .fy-skel-w50 { width: 50%; }
+#fizy-yardimci-sidebar .fy-skel-w65 { width: 65%; }
+#fizy-yardimci-sidebar .fy-skel-w80 { width: 80%; }
+
+#fizy-yardimci-sidebar .fy-skel-row {
+  display: flex;
+  gap: var(--fy-space-xs);
+  margin-top: var(--fy-space-2xs);
+}
+
+#fizy-yardimci-sidebar .fy-skel-pill {
+  height: 28px;
+  width: 78px;
+  border-radius: var(--fy-radius-pill);
+}
+
+#fizy-yardimci-sidebar .fy-skel-line::after,
+#fizy-yardimci-sidebar .fy-skel-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  animation: fy-shimmer 1.4s infinite;
+}
+
+/* =====================================================================
+   Boş durum
+   ===================================================================== */
+
+#fizy-yardimci-sidebar .fy-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 16px;
+  text-align: center;
+}
+
+#fizy-yardimci-sidebar .fy-empty-compact {
+  padding: 28px 0;
+}
+
+#fizy-yardimci-sidebar .fy-empty-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--fy-text-mute);
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+#fizy-yardimci-sidebar .fy-empty-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fy-text-mute);
+}
+
+/* =====================================================================
+   Keyframes
+   ===================================================================== */
+
+@keyframes fy-wave {
+  0%, 100% { transform: scaleY(0.18); }
+  50% { transform: scaleY(1); }
+}
+
+@keyframes fy-shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fy-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fy-flash {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* =====================================================================
+   Reduced motion
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #fizy-yardimci-sidebar.fy-sidebar *,
+  #fizy-yardimci-sidebar.fy-sidebar *::before,
+  #fizy-yardimci-sidebar.fy-sidebar *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

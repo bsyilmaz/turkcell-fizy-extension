@@ -1,0 +1,10 @@
+# Kişisel / yerel ayarlar (API anahtarı vb. asla repoya girmez)
+.claude/settings.local.json
+.DS_Store
+
+# API anahtarı uygulamada chrome.storage.local içinde tutulur,
+# hiçbir zaman koda gömülmez — yine de güvenlik için olası gizli dosyalar:
+*.key
+*.secret
+.env
+.env.*
